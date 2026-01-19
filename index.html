@@ -61,10 +61,16 @@
             position: absolute; top: 20px; left: 15px; z-index: 20; width: 85%;
         }
         .main-header h1 {
-            background: var(--white-glass); display: inline-block;
-            padding: 8px 18px; border-radius: 30px; font-size: 16px;
-            border: 2px solid var(--accent-orange); color: var(--wood-dark);
+            background: var(--white-glass);
+            display: inline-block; padding: 12px 35px; border-radius: 50px;
+            color: var(--wood-dark); font-size: 28px;
+            border: 3px solid var(--accent-orange);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 0;
         }
+        .main-header span { font-size: 18px; color: #ff5722; margin-left: 10px; 
+        }
+
         .map-section {
             height: 82%; background-color: var(--sea-blue);
             background-image: url('https://iili.io/fULDeb1.png');
@@ -175,48 +181,36 @@
                 </div>
             </div>
         </div>
-        <div id="pack-view" class="content-section">
+
+
+<div id="pack-view" class="content-section">
             <div class="info-page">
                 <div class="countdown-container">
                     <div>🏮 距離沖繩降落還有</div>
                     <div id="timer">計算中...</div>
                 </div>
-
                 <h2>🧳 愷蕎出門清單</h2>
                 <div class="info-card">
-                    <h4>日常必需品</h4>
-                    <p>• 尿布/濕紙巾 (足量)<br>• 換洗衣物 (3套/天)<br>• 奶粉/奶瓶/保溫瓶</p>
-                </div>
-                <div class="info-card">
-                    <h4>防護系列</h4>
-                    <p>• 寶寶防曬乳<br>• 遮陽帽/薄外套<br>• 防蚊液/止癢膏</p>
+                    <h4>必需品</h4>
+                    <p>• 尿布/濕紙巾<br>• 奶粉/奶瓶/保溫瓶<br>• 換洗衣物 (3套/天)</p>
                 </div>
             </div>
         </div>
+
         <div id="calc-view" class="content-section">
             <div class="info-page">
                 <h2>💴 日幣匯率換算</h2>
-                    <div class="converter-box">
-                        <div class="input-group">
-                            <label>輸入日圓 (JPY)</label>
-                            <input type="number" id="jpyInput" placeholder="0" oninput="convertCurrency()">
-                        </div>
-                        
-                        <div class="result-display">
-                            <span>港幣 (HKD)</span>
-                            <span id="hkdResult">≈ 0.00</span>
-                        </div>
-                        <div class="result-display">
-                            <span>台幣 (TWD)</span>
-                            <span id="twdResult">≈ 0.00</span>
-                        </div>
-                        
-                        <p style="font-size: 11px; color: #999; margin-top: 15px;">
-                            * 匯率僅供參考 (預設: 1 JPY = 0.052 HKD / 0.22 TWD)
-                        </p>
+                <div class="converter-box">
+                    <div class="input-group">
+                        <label>輸入日圓 (JPY)</label>
+                        <input type="number" id="jpyInput" placeholder="0" oninput="convertCurrency()">
                     </div>
-
-    </div>
+                    <div class="result-display"><span>港幣 (HKD)</span><span id="hkdResult">≈ 0.00</span></div>
+                    <div class="result-display"><span>台幣 (TWD)</span><span id="twdResult">≈ 0.00</span></div>
+                    <p style="font-size: 11px; color: #999; margin-top: 15px;">* 匯率預設: 1 JPY = 0.052 HKD / 0.22 TWD</p>
+                </div>
+            </div>
+        </div> </div>
 
     <div class="modal" id="infoModal">
         <div class="modal-content">
@@ -227,21 +221,17 @@
     </div>
 
     <script>
-        // Tab Switching Logic
+        // 標籤切換邏輯
         function openTab(evt, tabName) {
             const sections = document.getElementsByClassName("content-section");
-            for (let i = 0; i < sections.length; i++) {
-                sections[i].classList.remove("active");
-            }
+            for (let i = 0; i < sections.length; i++) sections[i].classList.remove("active");
             const tabButtons = document.getElementsByClassName("tab-btn");
-            for (let i = 0; i < tabButtons.length; i++) {
-                tabButtons[i].classList.remove("active");
-            }
+            for (let i = 0; i < tabButtons.length; i++) tabButtons[i].classList.remove("active");
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
         }
 
-        // Original Pin Data
+        // 景點數據
         const spotData = {
             'kokusai': { t: '國際通', d: '愷蕎第一站！伴手禮與美食散步首選。' },
             'churaumi': { t: '水族館', d: '全日本最壯觀！看巨大的鯨鯊在黑潮之海。' },
@@ -255,6 +245,7 @@
             'airport': { t: '那霸機場', d: '帶著滿滿回憶，準備回家囉！' }
         };
 
+        // 彈出視窗邏輯
         const pins = document.querySelectorAll('.pin');
         const modal = document.getElementById('infoModal');
         const mTitle = document.getElementById('modalTitle');
@@ -274,39 +265,25 @@
         function closeModal() { modal.style.display = 'none'; }
         window.onclick = (e) => { if (e.target == modal) closeModal(); };
 
-
-        // 2. Live Countdown Logic (Target: April 28, 2026, 09:30 AM)
+        // 倒數計時邏輯 (2026/4/28)
         const targetDate = new Date("April 28, 2026 09:30:00").getTime();
-
-        const countdownInterval = setInterval(function() {
+        setInterval(function() {
             const now = new Date().getTime();
             const distance = targetDate - now;
-
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
             document.getElementById("timer").innerHTML = `${days}天 ${hours}時 ${minutes}分 ${seconds}秒`;
-
-            if (distance < 0) {
-                clearInterval(countdownInterval);
-                document.getElementById("timer").innerHTML = "沖繩旅行中！✈️";
-            }
         }, 1000);
 
-        // 3. Currency Converter Logic
+        // 匯率換算邏輯
         function convertCurrency() {
             const jpy = document.getElementById("jpyInput").value;
-            const hkdRate = 0.052; // Update these rates before you fly!
-            const twdRate = 0.22;
-
-            const hkd = (jpy * hkdRate).toFixed(2);
-            const twd = (jpy * twdRate).toFixed(0); // TWD usually rounded to whole number
-
-            document.getElementById("hkdResult").innerText = "≈ " + hkd;
-            document.getElementById("twdResult").innerText = "≈ " + twd;
+            document.getElementById("hkdResult").innerText = "≈ " + (jpy * 0.052).toFixed(2);
+            document.getElementById("twdResult").innerText = "≈ " + (jpy * 0.22).toFixed(0);
         }
+
     </script>
 
 </body>

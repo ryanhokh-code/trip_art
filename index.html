@@ -5,148 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>28/4-2/5 沖繩家族旅行</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --sea-blue: #b3e5fc;
-            --wood-dark: #5d4037;
-            --wood-medium: #8d6e63;
-            --accent-orange: #ff7043;
-            --white-glass: rgba(255, 255, 255, 0.9);
-        }
-
-        body {
-            margin: 0; padding: 0;
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #e1f5fe;
-            display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh;
-        }
-
-        /* --- Navigation Tabs --- */
-        .nav-tabs {
-            display: flex;
-            width: 100%;
-            background: var(--wood-dark);
-            position: sticky; top: 0; z-index: 100;
-        }
-        .tab-btn {
-            flex: 1; padding: 15px 5px; border: none;
-            background: none; color: white; font-size: 12px;
-            font-weight: 700; cursor: pointer; transition: 0.3s;
-            border-bottom: 4px solid transparent;
-        }
-        .tab-btn.active {
-            background: var(--wood-medium);
-            border-bottom: 4px solid var(--accent-orange);
-        }
-
-        /* --- Main Container --- */
-        .poster-container {
-            width: 794px; height: 1123px;
-            background: white;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-            display: flex; flex-direction: column;
-            position: relative; border-radius: 12px; overflow: hidden;
-            border: 8px solid white;
-            min-width: 794px;
-            min-height: 1123px;
-        }
-
-        .content-section { display: none; width: 100%; height: 100%; }
-        .content-section.active { display: block; }
-
-        /* --- Tab 1: Map View --- */
-        .main-header {
-            position: absolute; top: 20px; left: 15px; z-index: 20; width: 85%;
-        }
-        .main-header h1 {
-            background: var(--white-glass);
-            display: inline-block; padding: 12px 35px; border-radius: 50px;
-            color: var(--wood-dark); font-size: 28px;
-            border: 3px solid var(--accent-orange);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin: 0;
-        }
-        .main-header span { font-size: 18px; color: #ff5722; margin-left: 10px; }
-
-        .map-section {
-            height: 82%; background-color: var(--sea-blue);
-            background-image: url('https://iili.io/fULDeb1.png');
-            background-size: cover; background-position: center; position: relative;
-        }
-        .schedule-section {
-            height: 18%; background: var(--wood-medium);
-            display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px;
-            padding: 10px; box-sizing: border-box; border-top: 4px solid var(--wood-dark);
-        }
-        .pin { position: absolute; width: 22px; height: 22px; background: var(--accent-orange); border: 2px solid white; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); z-index: 10; }
-        .pin::after { content: attr(data-label); position: absolute; transform: rotate(45deg); left: 24px; top: 0; background: white; padding: 2px 8px; border-radius: 10px; font-size: 11px; white-space: nowrap; font-weight: 700; color: var(--wood-dark); }
-        .wood-box { background: rgba(255, 255, 255, 0.9); border-radius: 6px; padding: 4px; text-align: center; display: flex; flex-direction: column; justify-content: center; }
-        .wood-box h3 { margin: 0; font-size: 16px; color: var(--wood-dark); }
-        .wood-box p { margin: 0; font-size: 13px; line-height: 1.2; font-weight: 700; }
-
-        /* --- Info Layouts --- */
-        .info-page { padding: 25px; background: #fffaf0; min-height: 100%; box-sizing: border-box; }
-        .info-page h2 { color: var(--accent-orange); border-bottom: 2px solid var(--accent-orange); padding-bottom: 5px; }
-        .info-card {
-            background: white; border-radius: 12px; padding: 15px;
-            margin-bottom: 15px; border-left: 5px solid var(--wood-medium);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        .info-card h4 { margin: 0 0 5px 0; color: var(--wood-dark); }
-        .info-card p { margin: 0; font-size: 14px; color: #555; line-height: 1.6; }
-
-        /* Countdown */
-        .countdown-container { background: linear-gradient(135deg, #ff7043, #ff5722); color: white; padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 20px; font-size: 16px; font-weight: 700; }
-        #timer { font-size: 24px; margin-top: 10px; letter-spacing: 2px; }
-
-        /* Converter */
-        .converter-box { background: white; padding: 20px; border-radius: 15px; border: 3px solid var(--accent-orange); }
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-weight: 700; color: var(--wood-dark); margin-bottom: 5px; }
-        .input-group input { width: 100%; padding: 12px; font-size: 16px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .result-display { display: flex; justify-content: space-between; padding: 12px; background: #f5f5f5; border-radius: 8px; margin-bottom: 10px; font-weight: 700; }
-
-        /* Weather */
-        .weather-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 15px; }
-        .weather-day { background: white; padding: 15px 10px; border-radius: 12px; text-align: center; border: 2px solid #e0e0e0; }
-        .weather-day h4 { margin: 0 0 10px 0; color: var(--wood-dark); font-size: 14px; }
-        .weather-icon { font-size: 36px; margin: 10px 0; }
-        .weather-temp { font-size: 18px; font-weight: 700; color: var(--accent-orange); }
-        .weather-desc { font-size: 11px; color: #666; margin-top: 5px; }
-
-        /* Expense Tracker */
-        .expense-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .expense-box { background: linear-gradient(135deg, #ff7043, #ff5722); color: white; padding: 15px; border-radius: 12px; text-align: center; }
-        .expense-box h4 { margin: 0; font-size: 12px; opacity: 0.9; }
-        .expense-box .amount { font-size: 24px; font-weight: 700; margin-top: 5px; }
-        .expense-input { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-        .expense-input input, .expense-input button { padding: 10px; border-radius: 8px; border: 2px solid #ddd; font-size: 14px; }
-        .expense-input button { background: var(--accent-orange); color: white; border: none; cursor: pointer; font-weight: 700; }
-        .expense-list { max-height: 400px; overflow-y: auto; }
-        .expense-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: white; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid var(--wood-medium); }
-        .expense-item button { background: #f44336; color: white; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; font-size: 12px; }
-
-        /* Photo Checklist */
-        .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .photo-card { background: white; padding: 15px; border-radius: 12px; border: 2px solid #e0e0e0; cursor: pointer; transition: 0.3s; }
-        .photo-card:hover { border-color: var(--accent-orange); transform: translateY(-2px); }
-        .photo-card.checked { background: #e8f5e9; border-color: #4caf50; }
-        .photo-card h4 { margin: 0 0 8px 0; color: var(--wood-dark); font-size: 15px; display: flex; align-items: center; gap: 8px; }
-        .photo-card p { margin: 0; font-size: 12px; color: #666; line-height: 1.4; }
-        .checkmark { font-size: 20px; color: #4caf50; display: none; }
-        .photo-card.checked .checkmark { display: inline; }
-
-        /* Modal */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 200; justify-content: center; align-items: center; }
-        .modal-content { background: #fffaf0; width: 80%; max-width: 300px; padding: 25px; border-radius: 20px; border: 4px solid var(--accent-orange); text-align: center; position: relative; }
-        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; color: #999; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="openTab(event, 'map-view')">行程地圖</button>
+        <button class="tab-btn" onclick="openTab(event, 'schedule-view')">詳細行程</button>
         <button class="tab-btn" onclick="openTab(event, 'flight-view')">航班資訊</button>
         <button class="tab-btn" onclick="openTab(event, 'food-view')">沖繩美食</button>
         <button class="tab-btn" onclick="openTab(event, 'pack-view')">備忘清單</button>
@@ -157,7 +22,6 @@
     </div>
 
     <div class="poster-container">
-
         <div id="map-view" class="content-section active">
             <div class="main-header">
                 <h1>28/4-2/5 家族旅行 <span>aka 愷蕎First Trip</span></h1>
@@ -182,7 +46,94 @@
                 <div class="wood-box"><h3>Day 5</h3><p>teamlab<br>那霸機場</p></div>
             </div>
         </div>
+        <div id="schedule-view" class="content-section">
+            <div class="info-page">
+                <h2>📅 5日詳細行程表</h2>
+                <div class="calendar-container">
+                    <div class="calendar-grid-header">
+                        <div>4/28 (二)</div>
+                        <div>4/29 (三)</div>
+                        <div>4/30 (四)</div>
+                        <div>5/01 (五)</div>
+                        <div>5/02 (六)</div>
+                    </div>
+                    <div class="calendar-grid-body">
+                        <div class="calendar-column">
+                            <div class="event-card">
+                                <span class="event-time">11:50</span>
+                                <div class="event-name">那霸機場抵達</div>
+                                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Naha+Airport" target="_blank">📍 地圖</a>
+                            </div>
+                            <div class="event-card">
+                                <span class="event-time">14:00</span>
+                                <div class="event-name">飯店 Check-in</div>
+                            </div>
+                            <div class="event-card accent">
+                                <span class="event-time">16:00</span>
+                                <div class="event-name">國際通</div>
+                                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Kokusai+Dori" target="_blank">📍 地圖</a>
+                            </div>
+                        </div>
 
+                        <div class="calendar-column">
+                            <div class="event-card">
+                                <span class="event-time">09:00</span>
+                                <div class="event-name">萬座毛 (象鼻岩)</div>
+                                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Manzamo" target="_blank">📍 地圖</a>
+                            </div>
+                            <div class="event-card accent">
+                                <span class="event-time">11:30</span>
+                                <div class="event-name">美麗海水族館</div>
+                                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Okinawa+Churaumi+Aquarium" target="_blank">📍 地圖</a>
+                            </div>
+                            <div class="event-card">
+                                <span class="event-time">17:00</span>
+                                <div class="event-name">美國村落日</div>
+                                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=American+Village" target="_blank">📍 地圖</a>
+                            </div>
+                        </div>
+
+                        <div class="calendar-column">
+                            <div class="event-card">
+                                <span class="event-time">10:00</span>
+                                <div class="event-name">沖繩兒童王國</div>
+                                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Okinawa+Zoo" target="_blank">📍 地圖</a>
+                                </div>
+                                <div class="event-card accent">
+                                    <span class="event-time">14:00</span>
+                                    <div class="event-name">永旺夢樂城 Aeon</div>
+                                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Aeon+Mall+Okinawa+Rycom" target="_blank">📍 地圖</a>
+                                </div>
+                            </div>
+
+                            <div class="calendar-column">
+                                <div class="event-card accent">
+                                    <span class="event-time">10:00</span>
+                                    <div class="event-name">DMM 水族館</div>
+                                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=DMM+Kariyushi+Aquarium" target="_blank">📍 地圖</a>
+                                </div>
+                                <div class="event-card">
+                                    <span class="event-time">14:00</span>
+                                    <div class="event-name">Ashibinaa Outlet</div>
+                                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Ashibinaa+Outlet" target="_blank">📍 地圖</a>
+                                </div>
+                            </div>
+
+                            <div class="calendar-column">
+                                <div class="event-card accent">
+                                    <span class="event-time">09:30</span>
+                                    <div class="event-name">teamLab 展覽</div>
+                                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=teamLab+Future+Park+Okinawa" target="_blank">📍 地圖</a>
+                                </div>
+                                <div class="event-card">
+                                    <span class="event-time">11:00</span>
+                                    <div class="event-name">前往機場</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <div id="flight-view" class="content-section">
             <div class="info-page">
                 <h2>✈️ 航班資訊</h2>
@@ -194,10 +145,6 @@
                     <h4>回程 (5/02)</h4>
                     <p>航班編號: JX871 (星宇航空)<br>起飛: 13:00 (OKA)<br>抵達: 13:30 (TPE)</p>
                 </div>
-                <div class="info-card">
-                    <h4>機場注意事項</h4>
-                    <p>• 建議提早2.5小時抵達機場<br>• 備妥全家護照及愷蕎出生證明備查<br>• 確認嬰兒推車托運規定</p>
-                </div>
             </div>
         </div>
 
@@ -206,19 +153,19 @@
                 <h2>🍜 沖繩必吃推薦</h2>
                 <div class="info-card">
                     <h4>暖暮拉麵 (那霸/名護)</h4>
-                    <p>曾獲得九州票選第一名。推薦芝麻蔥拉麵,濃郁湯頭深受家族喜愛。</p>
+                    <p>曾獲得九州票選第一名。推薦芝麻蔥拉麵。</p>
                 </div>
                 <div class="info-card">
                     <h4>幸福鬆餅 (瀨長島)</h4>
-                    <p>鬆軟綿密的口感,看著無敵海景享受下午茶,愷蕎也能坐著看海。</p>
+                    <p>鬆軟綿密的口感,看著無敵海景享受下午茶。</p>
                 </div>
                 <div class="info-card">
                     <h4>琉球新麵 通堂</h4>
-                    <p>特色的「男人麵」(濃厚豚骨) 與「女人麵」(清爽雞湯),全家大小都適合。</p>
+                    <p>特色的「男人麵」(濃厚豚骨) 與「女人麵」(清爽雞湯)。</p>
                 </div>
                 <div class="info-card">
                     <h4>Blue Seal 冰淇淋</h4>
-                    <p>沖繩代表性品牌。推薦紅芋口味與海鹽口味,到處都有分店!</p>
+                    <p>沖繩代表性品牌。推薦紅芋口味與海鹽口味。</p>
                 </div>
             </div>
         </div>
@@ -251,6 +198,7 @@
                 </div>
             </div>
         </div>
+
         <div id="weather-view" class="content-section">
             <div class="info-page">
                 <h2>🌤️ 沖繩即時天氣預報</h2>
@@ -268,22 +216,13 @@
             <div class="info-page">
                 <h2>💰 旅行開支記錄</h2>
                 <div class="expense-summary">
-                    <div class="expense-box">
-                        <h4>總花費</h4>
-                        <div class="amount" id="totalExpense">¥0</div>
-                    </div>
-                    <div class="expense-box">
-                        <h4>筆數</h4>
-                        <div class="amount" id="expenseCount">0</div>
-                    </div>
-                    <div class="expense-box">
-                        <h4>平均/日</h4>
-                        <div class="amount" id="avgExpense">¥0</div>
-                    </div>
+                    <div class="expense-box"><h4>總花費</h4><div class="amount" id="totalExpense">¥0</div></div>
+                    <div class="expense-box"><h4>筆數</h4><div class="amount" id="expenseCount">0</div></div>
+                    <div class="expense-box"><h4>平均/日</h4><div class="amount" id="avgExpense">¥0</div></div>
                 </div>
                 <div class="converter-box">
                     <div class="expense-input">
-                        <input type="text" id="expenseDesc" placeholder="項目 (例: 暖暮拉麵)">
+                        <input type="text" id="expenseDesc" placeholder="項目">
                         <input type="number" id="expenseAmount" placeholder="金額">
                         <button onclick="addExpense()">新增</button>
                     </div>
@@ -296,38 +235,14 @@
             <div class="info-page">
                 <h2>📸 必拍照片清單</h2>
                 <div class="photo-grid">
-                    <div class="photo-card" onclick="togglePhoto(this)">
-                        <h4><span class="checkmark">✓</span> 愷蕎在國際通</h4>
-                        <p>第一站紀念照,搭配國際通招牌</p>
-                    </div>
-                    <div class="photo-card" onclick="togglePhoto(this)">
-                        <h4><span class="checkmark">✓</span> 水族館鯨鯊</h4>
-                        <p>黑潮之海前全家合照</p>
-                    </div>
-                    <div class="photo-card" onclick="togglePhoto(this)">
-                        <h4><span class="checkmark">✓</span> 象鼻岩背景</h4>
-                        <p>萬座毛經典角度</p>
-                    </div>
-                    <div class="photo-card" onclick="togglePhoto(this)">
-                        <h4><span class="checkmark">✓</span> 美國村摩天輪</h4>
-                        <p>夕陽+摩天輪+家族</p>
-                    </div>
-                    <div class="photo-card" onclick="togglePhoto(this)">
-                        <h4><span class="checkmark">✓</span> 愷蕎看動物</h4>
-                        <p>兒童王國互動時刻</p>
-                    </div>
-                    <div class="photo-card" onclick="togglePhoto(this)">
-                        <h4><span class="checkmark">✓</span> teamLab 光影</h4>
-                        <p>互動藝術沉浸照</p>
-                    </div>
-                    <div class="photo-card" onclick="togglePhoto(this)">
-                        <h4><span class="checkmark">✓</span> 機場起飛照</h4>
-                        <p>星宇航空窗外景色</p>
-                    </div>
-                    <div class="photo-card" onclick="togglePhoto(this)">
-                        <h4><span class="checkmark">✓</span> 愷蕎在飛機上</h4>
-                        <p>First trip紀念照</p>
-                    </div>
+                    <div class="photo-card" onclick="togglePhoto(this)"><h4><span class="checkmark">✓</span> 愷蕎在國際通</h4><p>第一站紀念照</p></div>
+                    <div class="photo-card" onclick="togglePhoto(this)"><h4><span class="checkmark">✓</span> 水族館鯨鯊</h4><p>黑潮之海前全家合照</p></div>
+                    <div class="photo-card" onclick="togglePhoto(this)"><h4><span class="checkmark">✓</span> 象鼻岩背景</h4><p>萬座毛經典角度</p></div>
+                    <div class="photo-card" onclick="togglePhoto(this)"><h4><span class="checkmark">✓</span> 美國村摩天輪</h4><p>夕陽+家族</p></div>
+                    <div class="photo-card" onclick="togglePhoto(this)"><h4><span class="checkmark">✓</span> 愷蕎看動物</h4><p>兒童王國互動時刻</p></div>
+                    <div class="photo-card" onclick="togglePhoto(this)"><h4><span class="checkmark">✓</span> teamLab 光影</h4><p>互動藝術沉浸照</p></div>
+                    <div class="photo-card" onclick="togglePhoto(this)"><h4><span class="checkmark">✓</span> 機場起飛照</h4><p>星宇航空窗外景色</p></div>
+                    <div class="photo-card" onclick="togglePhoto(this)"><h4><span class="checkmark">✓</span> 愷蕎在飛機上</h4><p>First trip紀念照</p></div>
                 </div>
             </div>
         </div>
@@ -342,193 +257,6 @@
         </div>
     </div>
 
-    <script>
-        // 標籤切換邏輯
-        function openTab(evt, tabName) {
-            const sections = document.getElementsByClassName("content-section");
-            for (let i = 0; i < sections.length; i++) sections[i].classList.remove("active");
-            const tabButtons = document.getElementsByClassName("tab-btn");
-            for (let i = 0; i < tabButtons.length; i++) tabButtons[i].classList.remove("active");
-            document.getElementById(tabName).classList.add("active");
-            evt.currentTarget.classList.add("active");
-        }
-
-        // 景點數據
-        const spotData = {
-            'kokusai': { t: '國際通', d: '愷蕎第一站!伴手禮與美食散步首選。' },
-            'churaumi': { t: '水族館', d: '全日本最壯觀!看巨大的鯨鯊在黑潮之海。' },
-            'manzamo': { t: '象鼻岩', d: '萬座毛標誌,家族大合照絕佳地點。' },
-            'american': { t: '美國村', d: '異國情調,落日海灘散步最棒。' },
-            'zoo': { t: '兒童王國', d: '愷蕎的動物探險,適合小朋友近距離觀察。' },
-            'aeon': { t: 'Aeon Mall', d: '最大百貨,好逛、好買、還有大水族箱。' },
-            'dmm': { t: 'DMM水族館', d: '高科技影像藝術,視覺效果極夢幻。' },
-            'outlet': { t: 'Outlet', d: '把握最後血拼機會!超過100家品牌。' },
-            'teamlab': { t: 'teamLab', d: '沈浸式光影藝術,愷蕎的互動畫畫。' },
-            'airport': { t: '那霸機場', d: '帶著滿滿回憶,準備回家囉!' }
-        };
-
-        // 彈出視窗邏輯
-        const pins = document.querySelectorAll('.pin');
-        const modal = document.getElementById('infoModal');
-        const mTitle = document.getElementById('modalTitle');
-        const mDesc = document.getElementById('modalDesc');
-
-        pins.forEach(pin => {
-            pin.onclick = (e) => {
-                e.stopPropagation();
-                const id = pin.getAttribute('data-id');
-                const spot = spotData[id];
-                mTitle.innerText = spot.t;
-                mDesc.innerText = spot.d;
-                modal.style.display = 'flex';
-            };
-        });
-
-        function closeModal() { modal.style.display = 'none'; }
-        window.onclick = (e) => { if (e.target == modal) closeModal(); };
-
-        // 倒數計時邏輯 (2026/4/28)
-        const targetDate = new Date("April 28, 2026 09:30:00").getTime();
-        setInterval(function() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            document.getElementById("timer").innerHTML = `${days}天 ${hours}時 ${minutes}分 ${seconds}秒`;
-        }, 1000);
-
-        // 匯率換算邏輯
-        function convertCurrency() {
-            const jpy = document.getElementById("jpyInput").value;
-            document.getElementById("hkdResult").innerText = "≈ " + (jpy * 0.052).toFixed(2);
-            document.getElementById("twdResult").innerText = "≈ " + (jpy * 0.22).toFixed(0);
-        }
-
-        // --- 1. Load Data on Startup ---
-        // Attempt to load existing data from local storage, or default to empty arrays/objects
-        let expenses = JSON.parse(localStorage.getItem('okinawa_expenses')) || [];
-        let photoStatus = JSON.parse(localStorage.getItem('okinawa_photos')) || {};
-
-        // Initialize the display once the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            updateExpenseDisplay();
-            loadPhotoStatus();
-        });
-
-        // --- 2. Expense Tracker Logic ---
-        function addExpense() {
-            const desc = document.getElementById("expenseDesc").value;
-            const amount = parseInt(document.getElementById("expenseAmount").value);
-
-            if (!desc || isNaN(amount)) return alert("請填寫完整項目名稱與金額");
-
-            expenses.push({ desc, amount });
-
-            // Save to browser memory
-            saveExpenses();
-
-            document.getElementById("expenseDesc").value = "";
-            document.getElementById("expenseAmount").value = "";
-            updateExpenseDisplay();
-        }
-
-        function deleteExpense(index) {
-            if(confirm("確定要刪除此筆開支嗎？")) {
-                expenses.splice(index, 1);
-                saveExpenses();
-                updateExpenseDisplay();
-            }
-        }
-
-        function saveExpenses() {
-            localStorage.setItem('okinawa_expenses', JSON.stringify(expenses));
-        }
-
-        function updateExpenseDisplay() {
-            const total = expenses.reduce((sum, e) => sum + e.amount, 0);
-            const count = expenses.length;
-            // Assuming a 5-day trip for average calculation
-            const avg = count > 0 ? Math.round(total / 5) : 0;
-
-            document.getElementById("totalExpense").innerText = "¥" + total.toLocaleString();
-            document.getElementById("expenseCount").innerText = count;
-            document.getElementById("avgExpense").innerText = "¥" + avg.toLocaleString();
-
-            const listHTML = expenses.map((e, i) =>
-                `<div class="expense-item">
-                    <span><strong>${e.desc}</strong></span>
-                    <span>¥${e.amount.toLocaleString()} <button onclick="deleteExpense(${i})">刪除</button></span>
-                </div>`
-            ).join("");
-            document.getElementById("expenseList").innerHTML = listHTML || "<p style='text-align:center; color:#999;'>尚未新增任何開支</p>";
-        }
-
-
-        // 照片打卡邏輯
-        function togglePhoto(card) {
-            card.classList.toggle("checked");
-        }
-        async function fetchOkinawaWeather() {
-                const lat = 26.212; // Naha, Okinawa Latitude
-                const lon = 127.679; // Naha, Okinawa Longitude
-                const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max&timezone=Asia%2FTokyo`;
-
-                try {
-                    const response = await fetch(apiUrl);
-                    const data = await response.json();
-                    displayWeather(data.daily);
-                    document.getElementById('weather-status').innerText = "數據來源: Open-Meteo (即時更新)";
-                } catch (error) {
-                    console.error("Weather fetch failed:", error);
-                    document.getElementById('weather-status').innerText = "暫時無法取得天氣資訊，請稍後再試。";
-                }
-            }
-        // Mapping WMO Weather Codes to Icons and Descriptions
-        function getWeatherInfo(code) {
-            const mapping = {
-                0: { icon: '☀️', desc: '晴朗' },
-                1: { icon: '🌤️', desc: '晴時多雲' },
-                2: { icon: '⛅', desc: '多雲' },
-                3: { icon: '☁️', desc: '陰天' },
-                45: { icon: '🌫️', desc: '有霧' },
-                51: { icon: '🌧️', desc: '毛毛雨' },
-                61: { icon: '🌧️', desc: '小雨' },
-                63: { icon: '🌧️', desc: '陣雨' },
-                80: { icon: '🌦️', desc: '雷陣雨' },
-                95: { icon: '⛈️', desc: '雷雨' }
-            };
-            return mapping[code] || { icon: '❓', desc: '未知' };
-        }
-
-        function displayWeather(dailyData) {
-            const grid = document.getElementById('dynamic-weather-grid');
-            grid.innerHTML = ''; // Clear existing content
-
-            // We only show the first 5 days from the API
-            for (let i = 0; i < 5; i++) {
-                const date = new Date(dailyData.time[i]);
-                const dayStr = `${date.getMonth() + 1}/${date.getDate()} (${['日','一','二','三','四','五','六'][date.getDay()]})`;
-                const temp = Math.round(dailyData.temperature_2m_max[i]);
-                const info = getWeatherInfo(dailyData.weather_code[i]);
-
-                const dayElement = `
-                    <div class="weather-day">
-                        <h4>${dayStr}</h4>
-                        <div class="weather-icon">${info.icon}</div>
-                        <div class="weather-temp">${temp}°C</div>
-                        <div class="weather-desc">${info.desc}</div>
-                    </div>
-                `;
-                grid.innerHTML += dayElement;
-            }
-        }
-
-        // Call the function when the script loads
-        fetchOkinawaWeather();
-
-    </script>
-
+    <script src="script.js"></script>
 </body>
 </html>

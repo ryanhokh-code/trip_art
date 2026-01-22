@@ -137,12 +137,69 @@ function loadPhotoStatus() {
 }
 
 // --- 7. Utilities (Currency & Countdown) ---
-function convertCurrency() {
-    const jpy = document.getElementById("jpyInput").value;
-    document.getElementById("hkdResult").innerText = "≈ " + (jpy * 0.052).toFixed(2);
-    document.getElementById("twdResult").innerText = "≈ " + (jpy * 0.22).toFixed(0);
+// --- Live Currency Logic ---
+let exchangeRates = {
+    HKD: 0.052, // Fallback rates
+    TWD: 0.22
+};
+
+async function fetchLiveExchangeRates() {
+    const updateLabel = document.getElementById('fx-update-time');
+    const rateHkdLabel = document.getElementById('rate-hkd');
+    const rateTwdLabel = document.getElementById('rate-twd');
+
+    const url = `https://open.er-api.com/v6/latest/JPY`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.result === "success") {
+            exchangeRates.HKD = data.rates.HKD;
+            exchangeRates.TWD = data.rates.TWD;
+
+            // Update the quote labels
+            rateHkdLabel.innerText = exchangeRates.HKD.toFixed(4);
+            rateTwdLabel.innerText = exchangeRates.TWD.toFixed(3);
+
+            const date = new Date(data.time_last_update_utc).toLocaleDateString();
+            updateLabel.innerText = `最後更新: ${date} (來源: ExchangeRate-API)`;
+        } else {
+            throw new Error("API Error");
+        }
+    } catch (error) {
+        console.error("FX Fetch failed:", error);
+        updateLabel.innerText = "* 無法取得即時匯率，使用預設值。";
+        // Show fallback rates in the quote boxes
+        rateHkdLabel.innerText = "0.0520";
+        rateTwdLabel.innerText = "0.220";
+    }
 }
 
+// Update your conversion function to use the live rates
+function convertCurrency() {
+    const jpy = document.getElementById("jpyInput").value;
+    if (!jpy) {
+        document.getElementById("hkdResult").innerText = "≈ 0.00";
+        document.getElementById("twdResult").innerText = "≈ 0.00";
+        return;
+    }
+
+    const hkd = (jpy * exchangeRates.HKD).toFixed(2);
+    const twd = (jpy * exchangeRates.TWD).toFixed(0);
+
+    document.getElementById("hkdResult").innerText = "≈ " + parseFloat(hkd).toLocaleString();
+    document.getElementById("twdResult").innerText = "≈ " + parseInt(twd).toLocaleString();
+}
+
+// Ensure this is called in your DOMContentLoaded listener
+document.addEventListener('DOMContentLoaded', () => {
+    // ... your other init functions ...
+    fetchLiveExchangeRates();
+});
+
+
+// --- Countdown Timer Logic ---
 const targetDate = new Date("April 28, 2026 09:30:00").getTime();
 setInterval(() => {
     const now = new Date().getTime();
@@ -152,3 +209,89 @@ setInterval(() => {
     const m = Math.floor((dist % 3600000) / 60000);
     document.getElementById("timer").innerHTML = `${d}天 ${h}時 ${m}分`;
 }, 1000);
+
+
+// --- 8. Fuunction to read Threads posts
+// Add this to your DOMContentLoaded listener in script.js
+document.addEventListener('DOMContentLoaded', () => {
+    // ... your existing init functions ...
+    updateDailyThread();
+});
+// --- Threads Logic with Stability Fallback ---
+
+async function updateDailyThread() {
+    const threadContainer = document.getElementById('threads-content');
+    const threadDateLabel = document.getElementById('threads-date');
+
+    const lastUpdate = localStorage.getItem('threads_last_update');
+    const cachedData = localStorage.getItem('threads_data');
+    const now = new Date().getTime();
+
+    // Check for 24-hour cache (86,400,000 ms)
+    if (lastUpdate && (now - lastUpdate < 86400000) && cachedData) {
+        renderThread(JSON.parse(cachedData));
+        threadDateLabel.innerText = "最後更新日期: " + new Date(parseInt(lastUpdate)).toLocaleDateString();
+        return;
+    }
+
+    // Using a more stable community instance of RSSHub
+    const rssUrl = encodeURIComponent('https://rsshub.diygod.me/threads/hashtag/okinawa');
+    const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`;
+
+    try {
+        const response = await fetch(apiUrl);
+
+        // If the server returns a 500 or 404, jump to catch block
+        if (!response.ok) throw new Error('Source API Offline');
+
+        const data = await response.json();
+
+        if (data.status === 'ok' && data.items && data.items.length > 0) {
+            const latestPost = data.items[0];
+            const threadInfo = {
+                author: latestPost.author || 'Okinawa_Traveler',
+                content: latestPost.description.replace(/<[^>]*>?/gm, '').substring(0, 120) + "...",
+                link: latestPost.link,
+                isError: false
+            };
+
+            localStorage.setItem('threads_data', JSON.stringify(threadInfo));
+            localStorage.setItem('threads_last_update', now.toString());
+
+            renderThread(threadInfo);
+            threadDateLabel.innerText = "最後更新日期: " + new Date().toLocaleDateString();
+        } else {
+            showFallback();
+        }
+    } catch (error) {
+        console.error("Threads Fetch Error:", error);
+        showFallback();
+    }
+}
+
+function renderThread(data) {
+    const threadContainer = document.getElementById('threads-content');
+
+    // If we have real data, show the post
+    threadContainer.innerHTML = `
+        <div class="thread-post">
+            <p><strong>@${data.author}</strong></p>
+            <p>${data.content}</p>
+            <a href="${data.link}" target="_blank" class="thread-link">查看完整 Threads 貼文 →</a>
+        </div>
+    `;
+}
+
+function showFallback() {
+    const threadContainer = document.getElementById('threads-content');
+    // Display a manual search link if the API fails
+    threadContainer.innerHTML = `
+        <div class="thread-post" style="text-align: center; border: 1px dashed #555; background: #111;">
+            <p style="color: #bbb;">📴 目前無法取得自動更新</p>
+            <p style="font-size: 12px; margin-bottom: 10px;">Threads 官方目前限制了外部讀取。</p>
+            <a href="https://www.threads.net/search?q=%23okinawa" target="_blank" class="thread-link" style="border: 1px solid #1da1f2; padding: 5px 10px; border-radius: 20px;">
+                點此查看 #okinawa 實時動態
+            </a>
+        </div>
+    `;
+}

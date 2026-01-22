@@ -151,13 +151,12 @@
         <div id="food-view" class="content-section">
             <div class="info-page">
                 <h2>🍜 沖繩必吃推薦</h2>
-                <div class="info-card">
-                    <h4>暖暮拉麵 (那霸/名護)</h4>
-                    <p>曾獲得九州票選第一名。推薦芝麻蔥拉麵。</p>
-                </div>
-                <div class="info-card">
-                    <h4>幸福鬆餅 (瀨長島)</h4>
-                    <p>鬆軟綿密的口感,看著無敵海景享受下午茶。</p>
+                <div class="info-card threads-section">
+                    <h4>🧵 Threads 熱門動態 (#okinawa)</h4>
+                    <div id="threads-content">
+                        <p style="font-size: 12px; color: #999;">正在取得今日最新動態...</p>
+                    </div>
+                    <div id="threads-date" style="font-size: 10px; color: #ccc; margin-top: 10px;"></div>
                 </div>
                 <div class="info-card">
                     <h4>琉球新麵 通堂</h4>
@@ -186,15 +185,20 @@
 
         <div id="calc-view" class="content-section">
             <div class="info-page">
-                <h2>💴 日幣匯率換算</h2>
+                <h2>💴 日幣匯率換算 (即時匯率)</h2>
                 <div class="converter-box">
+                    <div id="current-rates-display" style="display: flex; justify-content: space-around; margin-bottom: 20px; padding: 10px; background: #fff3e0; border-radius: 8px; font-size: 13px; border: 1px solid var(--accent-orange);">
+                        <div>1 JPY = <span id="rate-hkd" style="font-weight: bold; color: var(--accent-orange);">--</span> HKD</div>
+                        <div>1 JPY = <span id="rate-twd" style="font-weight: bold; color: var(--accent-orange);">--</span> TWD</div>
+                    </div>
+
                     <div class="input-group">
                         <label>輸入日圓 (JPY)</label>
                         <input type="number" id="jpyInput" placeholder="0" oninput="convertCurrency()">
                     </div>
                     <div class="result-display"><span>港幣 (HKD)</span><span id="hkdResult">≈ 0.00</span></div>
                     <div class="result-display"><span>台幣 (TWD)</span><span id="twdResult">≈ 0.00</span></div>
-                    <p style="font-size: 11px; color: #999; margin-top: 15px;">* 匯率預設: 1 JPY = 0.052 HKD / 0.22 TWD</p>
+                    <p id="fx-update-time" style="font-size: 11px; color: #999; margin-top: 15px;">正在取得最新匯率...</p>
                 </div>
             </div>
         </div>

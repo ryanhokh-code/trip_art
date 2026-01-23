@@ -151,6 +151,21 @@
         <div id="food-view" class="content-section">
             <div class="info-page">
                 <h2>🍜 沖繩必吃推薦</h2>
+                <!-- Filter buttons (already exists) -->
+                <div class="specialty-filter-bar">
+                    <button class="filter-btn active" onclick="filterBySpecialty('Okinawa Restaurant', this)">🏠 全部</button>
+                    <button class="filter-btn" onclick="filterBySpecialty('Okinawa Soba', this)">🍜 沖繩麵</button>
+                    <button class="filter-btn" onclick="filterBySpecialty('Agu Pork', this)">🐷 阿古豬</button>
+                    <button class="filter-btn" onclick="filterBySpecialty('Taco Rice', this)">🌮 塔可飯</button>
+                    <button class="filter-btn" onclick="filterBySpecialty('Ishigaki Beef', this)">🥩 石垣牛</button>
+                    <button class="filter-btn" onclick="filterBySpecialty('Izakaya', this)">🍮 居酒屋</button>
+                </div>
+
+                <!-- ADD THIS NEW CONTAINER FOR RESULTS -->
+                <div id="restaurant-results-list" style="margin: 20px 0;">
+                    <!-- Results will appear here dynamically -->
+                </div>
+
                 <div class="info-card threads-section">
                     <h4>🧵 Threads 熱門動態 (#okinawa)</h4>
                     <div id="threads-content">
@@ -175,10 +190,163 @@
                     <div>🏮 距離沖繩降落還有</div>
                     <div id="timer">計算中...</div>
                 </div>
-                <h2>🧳 愷蕎出門清單</h2>
-                <div class="info-card">
-                    <h4>必需品</h4>
-                    <p>• 尿布/濕紙巾<br>• 奶粉/奶瓶/保溫瓶<br>• 換洗衣物 (3套/天)</p>
+
+                <h2>🧳 家庭出遊完整清單</h2>
+                <!-- Baby/Kid Essentials -->
+                <div class="info-card" style="border-left: 4px solid #FF6B6B;">
+                    <h4>👶 寶寶必需品（愷蕎專屬）</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                        <div>
+                            <p style="margin: 5px 0; font-weight: bold; color: #FF6B6B;">📦 衣物類</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 上衣/褲子 (5套，含備用)</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 外套/薄長袖 (2件)</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 襪子/鞋子 (3雙)</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 泳衣/防曬衣</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 帽子/太陽眼鏡</p>
+                        </div>
+                        <div>
+                            <p style="margin: 5px 0; font-weight: bold; color: #FF6B6B;">🍼 餵養用品</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 奶粉/奶瓶/保溫瓶</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 奶瓶刷/清潔液</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 副食品/零食</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 水杯/湯匙/圍兜</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 消毒濕紙巾</p>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+                        <div>
+                            <p style="margin: 5px 0; font-weight: bold; color: #FF6B6B;">🧷 衛生護理</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 尿布 (每天6片×5天)</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 濕紙巾 (大包裝2包)</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 尿布墊/防水墊</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 屁屁膏/乳液</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 口罩(備用)</p>
+                        </div>
+                        <div>
+                            <p style="margin: 5px 0; font-weight: bold; color: #FF6B6B;">🎒 娛樂用品</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 最愛玩具 (2-3件)</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 繪本/貼紙書</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 平板/耳機(飛機用)</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 推車遮陽罩</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 嬰兒推車(可租借)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parents Essentials -->
+                <div class="info-card" style="border-left: 4px solid #4ECDC4;">
+                    <h4>👨‍👩‍👧 爸媽必備清單</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                        <div>
+                            <p style="margin: 5px 0; font-weight: bold; color: #4ECDC4;">👔 衣物配件</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 換洗衣物 (3-4套/人)</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 內衣褲/襪子</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 泳衣/沙灘褲</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 外套/薄長袖</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 拖鞋/運動鞋</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 帽子/太陽眼鏡</p>
+                        </div>
+                        <div>
+                            <p style="margin: 5px 0; font-weight: bold; color: #4ECDC4;">🧴 盥洗美妝</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 防曬乳 SPF50+</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 沐浴/洗髮用品</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 牙刷/牙膏</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 化妝/保養品</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 刮鬍刀/修容</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 梳子/髮飾</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Electronics & Documents -->
+                <div class="info-card" style="border-left: 4px solid #FFD93D;">
+                    <h4>📱 3C產品 & 重要文件</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                        <div>
+                            <p style="margin: 5px 0; font-weight: bold; color: #FFD93D;">🔌 電子產品</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 手機×2 + 充電器</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 相機/GoPro + 記憶卡</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 行動電源 (2顆)</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 萬國轉接頭</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 延長線/USB充電器</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 耳機/藍牙喇叭</p>
+                        </div>
+                        <div>
+                            <p style="margin: 5px 0; font-weight: bold; color: #FFD93D;">📄 證件資料</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 護照 (全家3本)</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 機票電子憑證</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 飯店預訂確認</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 信用卡/現金日幣</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 旅遊保險單</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 駕照正本(租車用)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medical & Emergency -->
+                <div class="info-card" style="border-left: 4px solid #A8E6CF;">
+                    <h4>💊 醫療急救 & 其他</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                        <div>
+                            <p style="margin: 5px 0; font-weight: bold; color: #A8E6CF;">🏥 醫療用品</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 常備藥 (退燒/止痛)</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 腸胃藥/暈車藥</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• OK繃/紗布/藥膏</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 體溫計/耳溫槍</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 防蚊液/叮咬藥膏</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 口罩/酒精噴瓶</p>
+                        </div>
+                        <div>
+                            <p style="margin: 5px 0; font-weight: bold; color: #A8E6CF;">🎒 其他實用</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 環保袋/購物袋</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 塑膠袋/垃圾袋</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 雨傘/雨衣</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 保溫/冷袋</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 密封袋/收納袋</p>
+                            <p style="margin: 3px 0; font-size: 13px;">• 筆記本/原子筆</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pre-departure Checklist -->
+                <div class="info-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <h4 style="color: white; margin-bottom: 15px;">✈️ 出發前最終確認</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <p style="margin: 5px 0; font-size: 13px;">☑️ 護照有效期6個月以上</p>
+                            <p style="margin: 5px 0; font-size: 13px;">☑️ 線上報到完成</p>
+                            <p style="margin: 5px 0; font-size: 13px;">☑️ Visit Japan Web 填寫</p>
+                            <p style="margin: 5px 0; font-size: 13px;">☑️ 手機開通國際漫遊/WiFi機</p>
+                            <p style="margin: 5px 0; font-size: 13px;">☑️ 飯店地址存入Google Maps</p>
+                        </div>
+                        <div>
+                            <p style="margin: 5px 0; font-size: 13px;">☑️ 冷氣/電源/瓦斯關閉</p>
+                            <p style="margin: 5px 0; font-size: 13px;">☑️ 門窗上鎖檢查</p>
+                            <p style="margin: 5px 0; font-size: 13px;">☑️ 垃圾清空</p>
+                            <p style="margin: 5px 0; font-size: 13px;">☑️ 冰箱易腐食物處理</p>
+                            <p style="margin: 5px 0; font-size: 13px;">☑️ 行李重量確認(23kg/人)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Helpful Tips -->
+                <div class="info-card" style="border: 2px dashed #FF9800; background: #FFF3E0;">
+                    <h4 style="color: #FF9800;">💡 貼心小提醒</h4>
+                    <p style="font-size: 13px; margin: 8px 0; color: #555;">
+                        🍼 <strong>嬰兒食品可隨身攜帶：</strong>奶粉、副食品不受液體限制，但需通過安檢。
+                    </p>
+                    <p style="font-size: 13px; margin: 8px 0; color: #555;">
+                        🌡️ <strong>沖繩4月底天氣：</strong>約24-28°C，建議洋蔥式穿搭，室內冷氣較強。
+                    </p>
+                    <p style="font-size: 13px; margin: 8px 0; color: #555;">
+                        🚗 <strong>租車座椅：</strong>記得預約兒童安全座椅，日本法規強制規定。
+                    </p>
+                    <p style="font-size: 13px; margin: 8px 0; color: #555;">
+                        🏪 <strong>當地採購：</strong>Aeon Mall、藥妝店都有嬰兒用品，不夠可現場補充。
+                    </p>
+                    <p style="font-size: 13px; margin: 8px 0; color: #555;">
+                        📱 <strong>緊急聯絡：</strong>駐日代表處 +81-3-3280-7811 (24小時急難救助)
+                    </p>
                 </div>
             </div>
         </div>
@@ -186,7 +354,24 @@
         <div id="calc-view" class="content-section">
             <div class="info-page">
                 <h2>💴 日幣匯率換算 (即時匯率)</h2>
-                <div class="converter-box">
+
+                <!-- ADD THIS NEW CHART SECTION -->
+                <div class="fx-chart-container">
+                    <h3 style="color: var(--wood-dark); margin-bottom: 15px;">📊 30天匯率走勢圖</h3>
+                    <div class="rate-summary" id="rateSummary">
+                        <div style="text-align: center; color: #999; padding: 20px;">載入中...</div>
+                    </div>
+                    <div style="position: relative; height: 300px; margin-top: 20px;">
+                        <canvas id="fxChart"></canvas>
+                    </div>
+                    <div id="chartUpdateInfo" style="text-align: center; color: #999; font-size: 11px; margin-top: 10px;">
+                        資料更新中...
+                    </div>
+                </div>
+
+                <!-- Your existing converter box -->
+                <!-- Your existing converter box -->
+                <div class="converter-box" style="margin-top: 30px;">
                     <div id="current-rates-display" style="display: flex; justify-content: space-around; margin-bottom: 20px; padding: 10px; background: #fff3e0; border-radius: 8px; font-size: 13px; border: 1px solid var(--accent-orange);">
                         <div>1 JPY = <span id="rate-hkd" style="font-weight: bold; color: var(--accent-orange);">--</span> HKD</div>
                         <div>1 JPY = <span id="rate-twd" style="font-weight: bold; color: var(--accent-orange);">--</span> TWD</div>
@@ -260,7 +445,7 @@
             <p id="modalDesc">介紹內容...</p>
         </div>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

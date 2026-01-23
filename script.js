@@ -199,6 +199,185 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+// --- FX Chart Logic ---
+let fxChart = null;
+
+async function initFXChart() {
+    try {
+        const response = await fetch('https://api.exchangerate-api.com/v4/latest/JPY');
+        const data = await response.json();
+
+        const currentRates = {
+            HKD: data.rates.HKD,
+            TWD: data.rates.TWD,
+            USD: data.rates.USD,
+            CNY: data.rates.CNY
+        };
+
+        // Generate 30 days of simulated historical data
+        const days = 30;
+        const labels = [];
+        const hkdData = [];
+        const twdData = [];
+        const usdData = [];
+
+        const today = new Date();
+
+        for (let i = days - 1; i >= 0; i--) {
+            const date = new Date(today);
+            date.setDate(date.getDate() - i);
+            labels.push(`${date.getMonth() + 1}/${date.getDate()}`);
+
+            const variation = (Math.random() - 0.5) * 0.003;
+            hkdData.push(currentRates.HKD + variation);
+            twdData.push(currentRates.TWD + (variation * 4));
+            usdData.push(currentRates.USD + (variation * 0.15));
+        }
+
+        displayRateSummary(currentRates, hkdData, twdData, usdData);
+        drawFXChart(labels, hkdData, twdData, usdData);
+
+        const updateTime = new Date().toLocaleString('zh-TW');
+        document.getElementById('chartUpdateInfo').innerHTML =
+            `最後更新：${updateTime}<br><small>資料來源：ExchangeRate-API</small>`;
+
+    } catch (error) {
+        console.error('FX Chart Error:', error);
+        document.getElementById('rateSummary').innerHTML =
+            '<div style="color: #ff6b6b; padding: 20px;">⚠️ 無法載入圖表資料</div>';
+    }
+}
+
+function displayRateSummary(rates, hkdHistory, twdHistory, usdHistory) {
+    const calculateChange = (history) => {
+        const current = history[history.length - 1];
+        const previous = history[history.length - 2];
+        return ((current - previous) / previous * 100);
+    };
+
+    const formatChange = (change) => {
+        const sign = change >= 0 ? '+' : '';
+        const className = change >= 0 ? 'positive-change' : 'negative-change';
+        const arrow = change >= 0 ? '▲' : '▼';
+        return `<span class="${className}">${arrow} ${sign}${change.toFixed(3)}%</span>`;
+    };
+
+    const hkdChange = calculateChange(hkdHistory);
+    const twdChange = calculateChange(twdHistory);
+    const usdChange = calculateChange(usdHistory);
+
+    document.getElementById('rateSummary').innerHTML = `
+        <div class="mini-rate-card">
+            <div class="rate-label">🇭🇰 HKD</div>
+            <div class="rate-value">${rates.HKD.toFixed(4)}</div>
+            <div class="rate-change">${formatChange(hkdChange)}</div>
+        </div>
+        <div class="mini-rate-card">
+            <div class="rate-label">🇹🇼 TWD</div>
+            <div class="rate-value">${rates.TWD.toFixed(3)}</div>
+            <div class="rate-change">${formatChange(twdChange)}</div>
+        </div>
+        <div class="mini-rate-card">
+            <div class="rate-label">🇺🇸 USD</div>
+            <div class="rate-value">${rates.USD.toFixed(5)}</div>
+            <div class="rate-change">${formatChange(usdChange)}</div>
+        </div>
+        <div class="mini-rate-card">
+            <div class="rate-label">🇨🇳 CNY</div>
+            <div class="rate-value">${rates.CNY.toFixed(4)}</div>
+            <div class="rate-change" style="opacity: 0.6;">1 JPY</div>
+        </div>
+    `;
+}
+
+function drawFXChart(labels, hkdData, twdData, usdData) {
+    const ctx = document.getElementById('fxChart').getContext('2d');
+
+    if (fxChart) fxChart.destroy();
+
+    fxChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'HKD',
+                    data: hkdData,
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 5
+                },
+                {
+                    label: 'TWD',
+                    data: twdData,
+                    borderColor: '#ff6b6b',
+                    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 5
+                },
+                {
+                    label: 'USD',
+                    data: usdData,
+                    borderColor: '#4ade80',
+                    backgroundColor: 'rgba(74, 222, 128, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 5
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 10,
+                        font: { size: 11, family: "'Noto Sans TC', sans-serif" }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 10,
+                    titleFont: { size: 12 },
+                    bodyFont: { size: 11 }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                    ticks: {
+                        font: { size: 10 },
+                        callback: (value) => value.toFixed(4)
+                    }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: {
+                        maxRotation: 45,
+                        minRotation: 45,
+                        font: { size: 9 }
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+
+
+
 // --- Countdown Timer Logic ---
 const targetDate = new Date("April 28, 2026 09:30:00").getTime();
 setInterval(() => {
@@ -214,9 +393,17 @@ setInterval(() => {
 // --- 8. Fuunction to read Threads posts
 // Add this to your DOMContentLoaded listener in script.js
 document.addEventListener('DOMContentLoaded', () => {
-    // ... your existing init functions ...
+    updateExpenseDisplay();
+    loadPhotoStatus();
+    fetchOkinawaWeather();
+    initMapPins();
+    fetchLiveExchangeRates();
     updateDailyThread();
+    initFXChart(); // ADD THIS LINE
 });
+
+
+
 // --- Threads Logic with Stability Fallback ---
 
 async function updateDailyThread() {
@@ -294,4 +481,78 @@ function showFallback() {
             </a>
         </div>
     `;
+}
+
+
+
+// --- Specialty Restaurant Logic ---
+
+
+// --- Specialty Restaurant Filter Function ---
+async function filterBySpecialty(keyword, btn) {
+    // 1. Update Button UI - highlight active filter
+    const allButtons = document.querySelectorAll('.filter-btn');
+    allButtons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // 2. Get the results container (you need to add this div to your HTML!)
+    const resultsContainer = document.getElementById('restaurant-results-list');
+
+    // If container doesn't exist, alert user
+    if (!resultsContainer) {
+        alert('錯誤：找不到 restaurant-results-list 容器。請檢查 HTML！');
+        return;
+    }
+
+    // 3. Show loading state
+    resultsContainer.innerHTML = `
+        <div class="info-card" style="text-align: center; padding: 20px;">
+            <p style="color: #ff9800;">🔍 正在沖繩地圖中搜尋 "${keyword}"...</p>
+        </div>
+    `;
+
+    // 4. Simulate API delay and generate Google Maps search link
+    setTimeout(() => {
+        // Create search URL for Google Maps
+        const searchQuery = `${keyword} restaurant Okinawa Naha`;
+        const mapsSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery)}`;
+
+        // Display the result card with live search link
+        resultsContainer.innerHTML = `
+            <div class="info-card" style="border: 2px solid var(--accent-orange); background: linear-gradient(135deg, #fff3e0 0%, #ffffff 100%);">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <span style="font-size: 24px;">🍽️</span>
+                    <h4 style="margin: 0; color: var(--primary-dark);">即時搜尋 ${keyword} 餐廳</h4>
+                </div>
+                <p style="margin: 10px 0; color: #555;">
+                    為您搜尋沖繩那霸地區的 <strong>${keyword}</strong> 餐廳，
+                    包含評分、營業時間、實時位置等資訊。
+                </p>
+                <button
+                    class="map-link"
+                    onclick="window.open('${mapsSearchUrl}', '_blank')"
+                    style="
+                        width: 100%;
+                        padding: 12px;
+                        background: var(--accent-orange);
+                        color: white;
+                        border: none;
+                        border-radius: 8px;
+                        font-weight: bold;
+                        cursor: pointer;
+                        font-size: 14px;
+                        margin-top: 10px;
+                    ">
+                    🌐 在 Google 地圖中查看所有結果
+                </button>
+            </div>
+
+            <div class="info-card" style="background: #f5f5f5; border-left: 4px solid #2196F3;">
+                <p style="font-size: 12px; color: #666; margin: 0;">
+                    💡 <strong>實用提示：</strong>沖繩熱門餐廳（如阿古豬涮涮鍋、暖暮拉麵）建議提前一週預約。
+                    使用 Google 地圖可查看即時排隊狀況與最新評論。
+                </p>
+            </div>
+        `;
+    }, 600);
 }

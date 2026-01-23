@@ -193,6 +193,141 @@ body {
     font-weight: bold;
 }
 
+/* --- Specialty Filter Bar --- */
+.specialty-filter-bar {
+    display: flex;
+    overflow-x: auto; /* Allow horizontal swipe */
+    gap: 10px;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+.specialty-filter-bar::-webkit-scrollbar { display: none; } /* Hide for Chrome/Safari */
+
+.filter-btn {
+    white-space: nowrap;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 2px solid var(--accent-orange);
+    background: white;
+    color: var(--accent-orange);
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.filter-btn.active {
+    background: var(--accent-orange);
+    color: white;
+}
+
+/* --- Restaurant Result Cards --- */
+.restaurant-card {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-left: 5px solid #4caf50;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.res-header { display: flex; justify-content: space-between; align-items: center; }
+.res-rating { color: #f4b400; font-weight: bold; }
+
+
+/* --- FX Chart Styles --- */
+.fx-chart-container {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    border: 2px solid var(--accent-orange);
+    margin-bottom: 20px;
+}
+
+.rate-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.mini-rate-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.rate-label {
+    font-size: 11px;
+    opacity: 0.9;
+    margin-bottom: 5px;
+}
+
+.rate-value {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.rate-change {
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.positive-change { color: #4ade80; }
+.negative-change { color: #ff6b6b; }
+
+
+/* --- Currency Converter Styles --- */
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 700;
+    color: var(--wood-dark);
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--accent-orange);
+}
+
+.result-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.result-display span:first-child {
+    color: #666;
+    font-size: 14px;
+}
+
+.result-display span:last-child {
+    color: var(--accent-orange);
+    font-size: 18px;
+}
+
+
 
 /* --- Feature Specifics --- */
 .countdown-container { background: linear-gradient(135deg, #ff7043, #ff5722); color: white; padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 20px; font-weight: 700; }

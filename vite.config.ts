@@ -4,9 +4,9 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // REPLACE '/REPO_NAME/' with your actual repository name, e.g., '/okinawa-trip/'
-  base: '/trip_art/',
+  // Base must match your GitHub repository name
+  base: '/trip_art/', 
   define: {
-    'process.env.API_KEY': JSON.stringify(process.env.API_KEY)
+    'process.env.API_KEY': JSON.stringify(process.env.API_KEY || '')
   }
 })

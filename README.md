@@ -18,3 +18,14 @@ View your app in AI Studio: https://ai.studio/apps/drive/19CQ-Z_dWN3oyVD3kqKr1IM
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+
+** How to build for production: **
+1. rm -rf node_modules package-lock.json
+2. npm install
+3. npm run build
+
+
+- git rm -r --cached node_modules
+- git commit -m "Remove node_modules and update .gitignore"
+- git push origin main

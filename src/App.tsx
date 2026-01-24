@@ -106,7 +106,7 @@ const App: React.FC = () => {
       case Tab.EXPENSE: return <ExpenseView />;
       case Tab.WEATHER: return <WeatherView />;
       case Tab.CALC: return <CalculatorView />;
-      case Tab.AI: return <AiAssistant />;
+//       case Tab.AI: return <AiAssistant />;
       default: return <div className="p-10 text-center">功能開發中...</div>;
     }
   };

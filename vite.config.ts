@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   // REPLACE '/REPO_NAME/' with your actual repository name, e.g., '/okinawa-trip/'
-  base: '/REPO_NAME/', 
+  base: '/trip_art/',
   define: {
     'process.env.API_KEY': JSON.stringify(process.env.API_KEY)
   }

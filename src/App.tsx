@@ -6,7 +6,7 @@ import PackingList from './components/PackingList';
 import ExpenseView from './components/ExpenseView';
 import WeatherView from './components/WeatherView';
 import CalculatorView from './components/CalculatorView';
-import AiAssistant from './components/AiAssistant';
+// import AiAssistant from './components/AiAssistant';
 import FoodView from './components/FoodView';
 import { Tab } from './types';
 import { Plane } from 'lucide-react';

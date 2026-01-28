@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = process.env.API_KEY || '';
+const apiKey = 'AIsss';
 const ai = new GoogleGenAI({ apiKey });
 
 export const askTravelAssistant = async (query: string): Promise<string> => {
